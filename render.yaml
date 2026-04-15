@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: whisk-api-server
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HTTP_PROXY
+        sync: false
+      - key: HTTPS_PROXY
+        sync: false
