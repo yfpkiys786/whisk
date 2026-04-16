@@ -41,7 +41,7 @@ app.post('/api/generate', async (req: Request, res: Response) => {
     res.json({
       success: true,
       mediaId: media.mediaGenerationId,
-      imageUrl: media.url,
+      imageUrl: `data:image/png;base64,${media.encodedMedia}`,
       projectId: project.projectId
     });
   } catch (error: any) {
@@ -70,7 +70,7 @@ app.post('/api/animate', async (req: Request, res: Response) => {
     res.json({
       success: true,
       videoId: videoMedia.mediaGenerationId,
-      videoUrl: videoMedia.url
+      videoUrl: `data:video/mp4;base64,${videoMedia.encodedMedia}`
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -95,8 +95,8 @@ app.get('/api/media/:mediaId', async (req: Request, res: Response) => {
     res.json({
       success: true,
       mediaId: media.mediaGenerationId,
-      url: media.url,
-      type: media.type
+      url: `data:${media.mediaType === 'VIDEO' ? 'video/mp4' : 'image/png'};base64,${media.encodedMedia}`,
+      type: media.mediaType
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
