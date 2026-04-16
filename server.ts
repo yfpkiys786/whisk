@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cors from 'cors';
-import { Whisk } from './dist/Whisk.js';
-import { ImageAspectRatio, ImageGenerationModel, VideoGenerationModel } from './dist/Constants.js';
+import { Whisk } from './src/Whisk.js';
+import { ImageAspectRatio, ImageGenerationModel, VideoGenerationModel } from './src/Constants.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,12 +10,12 @@ app.use(cors());
 app.use(express.json());
 
 // Health check
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.json({ status: 'Whisk API Server is running', version: '1.0.0' });
 });
 
 // Generate image
-app.post('/api/generate', async (req, res) => {
+app.post('/api/generate', async (req: Request, res: Response) => {
   try {
     const { cookie, prompt, aspect = 'LANDSCAPE', seed = 0 } = req.body;
     
@@ -44,13 +44,13 @@ app.post('/api/generate', async (req, res) => {
       imageUrl: media.url,
       projectId: project.projectId
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Animate to video
-app.post('/api/animate', async (req, res) => {
+app.post('/api/animate', async (req: Request, res: Response) => {
   try {
     const { cookie, mediaId, script, model = 'VEO_3_1' } = req.body;
     
@@ -72,13 +72,13 @@ app.post('/api/animate', async (req, res) => {
       videoId: videoMedia.mediaGenerationId,
       videoUrl: videoMedia.url
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // Get media info
-app.get('/api/media/:mediaId', async (req, res) => {
+app.get('/api/media/:mediaId', async (req: Request, res: Response) => {
   try {
     const { mediaId } = req.params;
     const { cookie } = req.query;
@@ -98,7 +98,7 @@ app.get('/api/media/:mediaId', async (req, res) => {
       url: media.url,
       type: media.type
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
 });
